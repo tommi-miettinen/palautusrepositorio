@@ -1,5 +1,4 @@
-import { palindrome } from "../utils/for_testing.js";
-import { average } from "../utils/for_testing.js";
+import { palindrome, average } from "../utils/for_testing.js";
 
 test("palindrome of a", () => {
   const result = palindrome("a");
