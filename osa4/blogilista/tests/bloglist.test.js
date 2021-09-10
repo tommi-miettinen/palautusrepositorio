@@ -103,6 +103,13 @@ test("updates blog", async () => {
   expect(res2.body.likes).toBe(2);
 });
 
+test("401 Unauthorized if trying to add blog without token in request", async () => {
+  await api
+    .post("/api/blogs")
+    .send({ title: "test", author: "test", url: "test", likes: 0 })
+    .expect(401);
+});
+
 afterAll(async () => {
   await User.deleteMany({});
   await Blog.deleteMany({});
