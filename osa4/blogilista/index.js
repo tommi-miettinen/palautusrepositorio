@@ -1,7 +1,9 @@
 import express from "express";
 import expressAsyncErrors from "express-async-errors";
 import cors from "cors";
-import errorHandler from "./errorHandler.js";
+import tokenExtractor from "./middlewares/tokenExtractor.js";
+import errorHandler from "./middlewares/errorHandler.js";
+import userExtractor from "./middlewares/userExtractor.js";
 import * as db from "./db.js";
 import * as Blogs from "./controllers/Blogs.js";
 import * as Users from "./controllers/Users.js";
@@ -10,13 +12,15 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(tokenExtractor);
 
+app.post("/api/login", Users.login);
 app.post("/api/users", Users.create);
 app.get("/api/users", Users.findAll);
-app.get("/api/blogs", Blogs.findAll);
-app.delete("/api/blogs/:id", Blogs.deleteOne);
-app.patch("/api/blogs/:id", Blogs.updateOne);
-app.post("/api/blogs", Blogs.create);
+app.get("/api/blogs", Blogs.getAll);
+app.delete("/api/blogs/:id", userExtractor, Blogs.remove);
+app.patch("/api/blogs/:id", userExtractor, Blogs.updateOne);
+app.post("/api/blogs", userExtractor, Blogs.create);
 
 app.use(errorHandler);
 

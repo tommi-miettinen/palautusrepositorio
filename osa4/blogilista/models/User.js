@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 
 const userSchema = mongoose.Schema({
+  blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
   username: {
     type: String,
     required: true,

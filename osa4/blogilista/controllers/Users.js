@@ -11,7 +11,7 @@ export const login = async (req, res) => {
       : await bcrypt.compare(body.password, user.passwordHash);
 
   if (!(user && passwordCorrect)) {
-    return response.status(401).json({
+    return res.status(401).json({
       error: "invalid username or password",
     });
   }
@@ -46,6 +46,6 @@ export const create = async (req, res) => {
 };
 
 export const findAll = async (req, res) => {
-  const users = await User.find({});
+  const users = await User.find({}).populate("blogs");
   res.send(users);
 };
