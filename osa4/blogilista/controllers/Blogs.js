@@ -20,8 +20,8 @@ export const getAll = async (req, res) => {
 };
 
 export const updateOne = async (req, res) => {
+  const blog = req.body;
   const blogId = req.params.id;
-  const data = req.body;
-  const result = await blogService.updateBlog(blogId, data);
+  const result = await blogService.updateBlog(blogId, blog);
   res.send(result);
 };

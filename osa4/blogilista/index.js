@@ -7,6 +7,7 @@ import userExtractor from "./middlewares/userExtractor.js";
 import * as db from "./db.js";
 import * as Blogs from "./controllers/Blogs.js";
 import * as Users from "./controllers/Users.js";
+import * as Testing from "./controllers/Testing.js";
 
 const app = express();
 
@@ -20,7 +21,12 @@ app.get("/api/users", Users.findAll);
 app.get("/api/blogs", Blogs.getAll);
 app.delete("/api/blogs/:id", userExtractor, Blogs.remove);
 app.patch("/api/blogs/:id", userExtractor, Blogs.updateOne);
+app.put("/api/blogs/:id", userExtractor, Blogs.updateOne);
 app.post("/api/blogs", userExtractor, Blogs.create);
+
+if (process.env.NODE_ENV === "test") {
+  app.use("/api/testing", Testing.reset);
+}
 
 app.use(errorHandler);
 

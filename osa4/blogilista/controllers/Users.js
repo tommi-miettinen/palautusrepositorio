@@ -42,6 +42,8 @@ export const create = async (req, res) => {
 
   const savedUser = await user.save();
 
+  console.log("user created");
+
   res.send(savedUser);
 };
 

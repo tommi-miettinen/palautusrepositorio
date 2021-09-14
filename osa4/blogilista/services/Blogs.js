@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export const deleteBlog = async (blogId, userId) => {
   const blog = await Blog.findById({ _id: blogId });
   if (userId !== blog.user.toString()) throw new Error("Not Authorized");
-  await Blog.deleteOne({ _id: blogId, user: userId });
+  await Blog.deleteOne({ _id: blogId });
 };
 
 export const findBlogs = async () => {
