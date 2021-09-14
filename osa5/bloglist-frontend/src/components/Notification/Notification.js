@@ -1,7 +1,8 @@
 const Notification = ({ isError, notification }) => {
   const color = isError ? "red" : "green";
-  return (
+  return notification ? (
     <div
+      className={isError ? "error" : ""}
       style={{
         color,
         height: 40,
@@ -11,7 +12,7 @@ const Notification = ({ isError, notification }) => {
     >
       {notification}
     </div>
-  );
+  ) : null;
 };
 
 export default Notification;

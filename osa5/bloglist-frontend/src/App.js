@@ -40,9 +40,9 @@ const App = () => {
   const handleLogin = async (userInfo) => {
     try {
       const result = await loginService.login(userInfo);
-      localStorage.user = JSON.stringify(result.data);
-      blogService.setToken(userInfo.token);
-      setUser(userInfo);
+      localStorage.user = JSON.stringify(result);
+      blogService.setToken(result.token);
+      setUser(result);
     } catch (err) {
       setError(true);
       setNotification("Invalid username or password");
@@ -101,9 +101,7 @@ const App = () => {
   return user ? (
     <div>
       <h2>blogs</h2>
-      {notification && (
-        <Notification isError={error} notification={notification} />
-      )}
+      <Notification isError={error} notification={notification} />
       <p>
         {user.username} logged in <button onClick={handleLogout}>logout</button>
       </p>
@@ -124,9 +122,7 @@ const App = () => {
     </div>
   ) : (
     <div>
-      {notification && (
-        <Notification isError={error} notification={notification} />
-      )}
+      <Notification isError={error} notification={notification} />
       <LoginForm handleLogin={handleLogin} />
     </div>
   );
