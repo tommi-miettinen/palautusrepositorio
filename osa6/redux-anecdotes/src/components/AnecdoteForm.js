@@ -11,7 +11,7 @@ const AnecdoteForm = () => {
   const addAnecdote = async () => {
     const newAnecdote = { content, votes: 0 };
     dispatch(add(newAnecdote));
-    dispatch(setNotification(`${newAnecdote.content} added`, 5000));
+    dispatch(setNotification(`${newAnecdote.content} added`, 5));
     setContent("");
   };
 
