@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import { like, deleteBlog, getBlogs } from "../../redux/reducers/blogReducer";
+import { setNotification } from "../../redux/reducers/notificationReducer";
 
 const Blog = () => {
   const id = useParams().id;
+  const history = useHistory();
   const user = useSelector((state) => state.userState.user);
-  const blog = useSelector((state) =>
-    state.blogs.find((blog) => blog.id === id)
-  );
+  //prettier-ignore
+  const blog = useSelector((state) => state.blogs.find((blog) => blog.id === id));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,37 +29,54 @@ const Blog = () => {
       const confirmed = window.confirm("Delete blog?");
       if (confirmed) {
         dispatch(deleteBlog(blog));
+        dispatch(setNotification(`${blog.title} deleted`, false, 5));
+        history.push("/blogs");
       }
     } catch (err) {
-      console.log(err);
+      dispatch(setNotification("Something went wrong", true, 5));
     }
   };
 
-  const isOwner = blog
-    ? blog.user.id === user.id || blog.user === user.id
-    : false;
+  if (!blog) return null;
 
-  return blog ? (
-    <div
-      style={{
-        border: "1px solid black",
-        minHeight: 40,
-        padding: 20,
-        margin: 1,
-      }}
-    >
-      <div>Title: {blog.title}</div>
-      <div>Author: {blog.author}</div>
-      <div>
-        <div>Url:{blog.url} </div>
+  //prettier-ignore
+  const isOwner = blog ? blog.user.id === user.id || blog.user === user.id : false;
+
+  return (
+    <div>
+      <div
+        style={{
+          border: "1px solid black",
+          minHeight: 40,
+          padding: 20,
+          margin: 1,
+        }}
+      >
+        <h1>
+          {blog.title} {blog.author}
+        </h1>
         <div>
-          Likes: {blog.likes}
-          <button onClick={() => handleLike(blog)}>like</button>
+          <a href={blog.url} target="_blank">
+            {blog.url}
+          </a>
+          <div>
+            Likes: {blog.likes}
+            <button onClick={() => handleLike(blog)}>like</button>
+          </div>
+          <div>added by {blog.user.username}</div>
+          {isOwner && (
+            <button onClick={() => handleDelete(blog)}>delete</button>
+          )}
         </div>
-        {isOwner && <button onClick={() => handleDelete(blog)}>delete</button>}
       </div>
+      <h3>comments</h3>
+      {blog.comments.map((comment, index) => (
+        <div style={{ margin: 10 }} key={index + comment}>
+          {comment}
+        </div>
+      ))}
     </div>
-  ) : null;
+  );
 };
 
 export default Blog;

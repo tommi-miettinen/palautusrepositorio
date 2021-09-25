@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import { getUsers } from "../../redux/reducers/userReducer";
-import { Link } from "react-router-dom";
+import BlogList from "../../components/BlogList/BlogList";
 
 const User = () => {
   const id = useParams().id;
@@ -19,13 +19,7 @@ const User = () => {
   return (
     <div>
       {user.username} added blogs
-      <div>
-        {user.blogs.map((blog) => (
-          <div>
-            <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
-          </div>
-        ))}
-      </div>
+      <BlogList blogs={user.blogs} />
     </div>
   );
 };

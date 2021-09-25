@@ -1,19 +1,18 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { Route } from "react-router-dom";
-import BlogList from "./components/BlogList/BlogList";
-import BlogForm from "./components/BlogForm/BlogForm";
-import Blog from "./components/Blog/Blog";
+import { useDispatch, useSelector } from "react-redux";
+import { Route, Switch, Redirect } from "react-router-dom";
+import Blogs from "./pages/Blogs/Blogs";
+import BlogDetails from "./pages/BlogDetails/BlogDetails";
 import LoginForm from "./components/LoginForm/LoginForm";
-import UserStatus from "./components/UserStatus/UserStatus";
-import Users from "./components/Users/Users";
-import User from "./components/User/User";
+import Users from "./pages/Users/Users";
+import User from "./pages/User/User";
 import Navigation from "./components/Navigation/Navigation";
 import Notification from "./components/Notification/Notification";
 import { setUser } from "./redux/reducers/userReducer";
 
 const App = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.userState.user);
 
   useEffect(() => {
     if (localStorage.user) {
@@ -21,27 +20,36 @@ const App = () => {
     }
   }, []);
 
+  if (!user)
+    return (
+      <Switch>
+        <Route path="/" exact>
+          <Notification />
+          <LoginForm />
+        </Route>
+        <Redirect to="/" />
+      </Switch>
+    );
+
   return (
     <div>
       <Navigation />
-      <UserStatus />
       <Notification />
-      <Route path="/blogs" exact>
-        <BlogForm />
-        <BlogList />
-      </Route>
-      <Route path="/blogs/:id">
-        <Blog />
-      </Route>
-      <Route path="/users" exact>
-        <Users />
-      </Route>
-      <Route path="/users/:id" exact>
-        <User />
-      </Route>
-      <Route path="/" exact>
-        <LoginForm />
-      </Route>
+      <Switch>
+        <Route path="/blogs/:id" exact>
+          <BlogDetails />
+        </Route>
+        <Route path="/blogs" exact>
+          <Blogs />
+        </Route>
+        <Route path="/users/:id" exact>
+          <User />
+        </Route>
+        <Route path="/users" exact>
+          <Users />
+        </Route>
+        <Redirect to="/blogs" />
+      </Switch>
     </div>
   );
 };

@@ -13,18 +13,20 @@ const Users = () => {
   return (
     <div>
       <table>
-        <tr>
-          <th style={{ textAlign: "center" }}>User</th>
-          <th style={{ textAlign: "center" }}>created blogs</th>
-        </tr>
-        {users.map((user) => (
+        <tbody>
           <tr>
-            <td>
-              <Link to={`/users/${user.id}`}>{user.username}</Link>
-            </td>
-            <td style={{ textAlign: "center" }}>{user.blogs.length}</td>
+            <th style={{ textAlign: "center" }}>User</th>
+            <th style={{ textAlign: "center" }}>created blogs</th>
           </tr>
-        ))}
+          {users.map((user) => (
+            <tr key={user.id}>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.username}</Link>
+              </td>
+              <td style={{ textAlign: "center" }}>{user.blogs.length}</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );

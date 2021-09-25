@@ -2,9 +2,9 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { useField } from "../../hooks";
 import { setUser } from "../../redux/reducers/userReducer";
+import { setNotification } from "../../redux/reducers/notificationReducer";
 import blogService from "../../services/blogs";
 import loginService from "../../services/login";
-import PropTypes from "prop-types";
 
 const LoginForm = () => {
   const username = useField("text");
@@ -20,7 +20,7 @@ const LoginForm = () => {
       dispatch(setUser(result));
       history.push("/blogs");
     } catch (err) {
-      console.log(err);
+      dispatch(setNotification("Invalid credentials", true, 5));
     }
   };
 
@@ -35,17 +35,13 @@ const LoginForm = () => {
       }}
     >
       <label>Käyttäjä</label>
-      <input {...username}></input>
+      <input {...username} reset=""></input>
       <label>Salasana</label>
-      <input {...password}></input>
+      <input {...password} reset=""></input>
       {/*prettier-ignore*/}
       <button onClick={() => handleLogin({ username: username.value, password: password.value })}>login</button>
     </div>
   );
-};
-
-LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
